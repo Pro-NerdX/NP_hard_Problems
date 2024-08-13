@@ -5,8 +5,7 @@ import java.util.HashSet;
 import data_structures.graph.*;
 
 public class VertexCover {
-    
-    
+
     protected final int k;
     protected final Graph G;
 
@@ -34,12 +33,12 @@ public class VertexCover {
         return this.result;
     }
 
-    public boolean verifyInPolyTime(final HashSet<Vertex> vertexCover) {
-        if (vertexCover.size() > k) {
+    public boolean verifyInPolyTime(final HashSet<Vertex> certificate) {
+        if (certificate.size() > k) {
             return false;
         }
         for (final Edge edge : this.G.E) {
-            if ((!vertexCover.contains(edge.to)) && (!vertexCover.contains(edge.from))) {
+            if ((!certificate.contains(edge.to)) && (!certificate.contains(edge.from))) {
                 return false;
             }
         }
