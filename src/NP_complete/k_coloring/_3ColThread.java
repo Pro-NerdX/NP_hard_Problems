@@ -32,29 +32,36 @@ public class _3ColThread extends Thread {
             return;
         }
         if (!((this.lastAssignedAtIndex + 1) == this.numVertices)) {
-            final int nextIndextoAssign = this.lastAssignedAtIndex + 1;
-            final HashSet<_3ColThread> newThreads = new HashSet<>();
-            for (int i = 0; i < 3; i++) {
-                final ArrayList<Pair<Vertex, Integer>> newAssignment = new ArrayList<>(this.assignment);
-                final Vertex vertex2assign = this.assignment.remove(nextIndextoAssign).first;
-                this.assignment.add(new Pair<Vertex, Integer>(vertex2assign, i));
-                final _3ColThread thread = new _3ColThread(this._3coloring, nextIndextoAssign, newAssignment, this.numVertices);
-                thread.start();
-                newThreads.add(thread);
-            }
-            for (final _3ColThread thread : newThreads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            this.subRun();
             return;
         }
         // everything is assigned, so run verifier
         if (this._3coloring.verifyInPolytime(this.assignment)) {
             this._3coloring.setResult(true);
             this._3coloring.set3Coloring(this.assignment);
+        }
+    }
+
+    /**
+     * @brief Not every vertex has been assigned to a possible color yet, so we must start new threads to keep assigning vertices.
+     */
+    private void subRun() {
+        final int nextIndextoAssign = this.lastAssignedAtIndex + 1;
+        final HashSet<_3ColThread> newThreads = new HashSet<>();
+        for (int i = 0; i < 3; i++) {
+            final ArrayList<Pair<Vertex, Integer>> newAssignment = new ArrayList<>(this.assignment);
+            final Vertex vertex2assign = this.assignment.remove(nextIndextoAssign).first;
+            this.assignment.add(new Pair<Vertex, Integer>(vertex2assign, i));
+            final _3ColThread thread = new _3ColThread(this._3coloring, nextIndextoAssign, newAssignment, this.numVertices);
+            thread.start();
+            newThreads.add(thread);
+        }
+        for (final _3ColThread thread : newThreads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
