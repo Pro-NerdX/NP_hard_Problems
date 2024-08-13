@@ -1,4 +1,4 @@
-package test;
+package tests;
 
 // import static org.junit.Assert.*;
 
@@ -28,8 +28,9 @@ public class VertexCoverTests {
             }
         }
         final Graph graph = new Graph(edges, false);
-        // System.out.println(graph.toString());
         final int k = 1;
+        // System.out.println(graph.toString());
+        // System.out.println("k = 1");
         final VertexCover vertexCoverSolver = new VertexCover(k, graph);
         final boolean wasNoInstance = !vertexCoverSolver.solve();
         assert (wasNoInstance);
@@ -52,6 +53,7 @@ public class VertexCoverTests {
         final Graph graph = new Graph(edges, false);
         // System.out.println(graph.toString());
         final int k = 3;
+        // System.out.println("k = 3");
         final VertexCover vertexCoverSolver = new VertexCover(k, graph);
         assert (vertexCoverSolver.solve());
     }
@@ -78,8 +80,10 @@ public class VertexCoverTests {
         final Graph graph = new Graph(new HashSet<>(V), edges, false);
         // System.out.println(graph.toString());
         final VertexCover vertexCoverSolver = new VertexCover(4, graph);
+        // System.out.println("k = 4");
         assert (vertexCoverSolver.solve());
         final VertexCover vertexCoverSolver2 = new VertexCover(5, graph);
+        // System.out.println("k = 5");
         assert (vertexCoverSolver2.solve());
     }
 }

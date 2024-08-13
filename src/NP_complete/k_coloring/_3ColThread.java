@@ -51,7 +51,7 @@ public class _3ColThread extends Thread {
         for (int i = 0; i < 3; i++) {
             final ArrayList<Pair<Vertex, Integer>> newAssignment = new ArrayList<>(this.assignment);
             final Vertex vertex2assign = this.assignment.remove(nextIndextoAssign).first;
-            this.assignment.add(new Pair<Vertex, Integer>(vertex2assign, i));
+            this.assignment.add(nextIndextoAssign, new Pair<Vertex, Integer>(vertex2assign, i));
             final _3ColThread thread = new _3ColThread(this._3coloring, nextIndextoAssign, newAssignment, this.numVertices);
             thread.start();
             newThreads.add(thread);
