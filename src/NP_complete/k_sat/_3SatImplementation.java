@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import NP_complete.k_coloring.Sequential3Coloring;
 import NP_complete.k_coloring._3Coloring;
 import data_structures.boolean_formula.Variable;
 import data_structures.boolean_formula.cnf.Disjunction;
@@ -21,6 +22,9 @@ public class _3SatImplementation {
         this.cnf = cnf;
     }
 
+    /*
+     * TODO: Reduction generates too large arrays
+     */
     public Graph reduceTo3Coloring() {
         // Add 1 copy of G_1
         final Vertex bottomNode = new Vertex(-1);
@@ -28,9 +32,9 @@ public class _3SatImplementation {
         final Vertex zNode = new Vertex(0);
         
         final HashSet<Vertex> vertices = new HashSet<>();
-        vertices.add(bottomNode);
-        vertices.add(topNode);
-        vertices.add(zNode);
+        //vertices.add(bottomNode);
+        //vertices.add(topNode);
+        //vertices.add(zNode);
 
         final HashSet<Edge> edges = new HashSet<>();
         edges.add(new Edge(bottomNode, topNode, 1));
@@ -104,7 +108,7 @@ public class _3SatImplementation {
         }
 
         // generate the final graph and return
-        final Graph graph = new Graph(vertices, edges, false);
+        final Graph graph = new Graph(edges, false);
         return graph;
     }
 
@@ -125,8 +129,8 @@ public class _3SatImplementation {
      */
     public boolean solve() {
         final Graph graph = this.reduceTo3Coloring();
-        final _3Coloring _3colSolver = new _3Coloring(graph);
-        return _3colSolver.solve();
+        final Sequential3Coloring _3colSolver = new Sequential3Coloring(graph);
+        _3colSolver.solve();
+        return _3colSolver.wasYesInstance();
     }
-        
 }
