@@ -1,6 +1,9 @@
 package data_structures.boolean_formula.cnf;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import data_structures.boolean_formula.Variable;
 
 public class _3CNF {
     
@@ -37,6 +40,20 @@ public class _3CNF {
             res = res && disjunction.evaluate();
         }
         return res;
+    }
+
+    public HashSet<Variable> getAllVariables() {
+        final HashSet<Variable> res = new HashSet<>();
+        for (final Disjunction disjunction : this.disjunctions) {
+            for (final Literal literal : disjunction.literals) {
+                res.add(literal.variable);
+            }
+        }
+        return res;
+    }
+
+    public ArrayList<Disjunction> getAllClauses() {
+        return this.disjunctions;
     }
 
     @Override

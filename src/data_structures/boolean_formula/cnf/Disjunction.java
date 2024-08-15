@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Disjunction {
     
-    final ArrayList<Literal> literals;
+    public final ArrayList<Literal> literals;
 
     public Disjunction(final ArrayList<Literal> literals) {
         this.literals = literals;
