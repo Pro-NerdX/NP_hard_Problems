@@ -59,13 +59,14 @@ public class _3SatImplementation {
 
         // Add 1 copy of G_3 for each clause
         for (final Disjunction clause : this.cnf.getAllClauses()) {
-            int sizeOfClause = clause.size();
+            final int sizeOfClause = clause.size();
             if (sizeOfClause == 0) {
                 throw new RuntimeException("Empty clause found!");
             }
 
             // getting l_1, l_2, and l_3
-            final ArrayList<Vertex> ls = new ArrayList<>();
+            final Vertex[] ls = new Vertex[3];
+            int index = 0;
             for (final Literal literal : clause.literals) {
                 final Variable var = literal.variable;
                 final Vertex l_i = this.getVertexById(
@@ -74,37 +75,40 @@ public class _3SatImplementation {
                         ? varToVertexIdMap.get(var)
                         : (varToVertexIdMap.get(var) * (-1))
                 );
-                ls.add(l_i);
+                ls[index] = l_i;
+                index++;
             }
-            while (sizeOfClause < 3) {
-                ls.add(ls.get(0));
+            for (int i = 1; i < 3; i++) {
+                if (ls[i] == null) {
+                    ls[i] = ls[0];
+                }
             }
             final Vertex l1, l2, l3;
-            l1 = ls.get(0);
-            l2 = ls.get(1);
-            l3 = ls.get(2);
+            l1 = ls[0];
+            l2 = ls[1];
+            l3 = ls[2];
 
             // introduce dummy vertices
-            final ArrayList<Vertex> dummies = new ArrayList<>();
+            final Vertex[] dummies = new Vertex[6];
             for (int i = 0; i < 6; i++) {
                 final Vertex dummy = new Vertex(idCounter + i);
-                dummies.add(dummy);
+                dummies[i] = dummy;
                 vertices.add(dummy);
             }
             idCounter += 6;
 
             // introduce edges for G_3
-            edges.add(new Edge(l1, dummies.get(0), 3));
-            edges.add(new Edge(l2, dummies.get(1), 3));
-            edges.add(new Edge(l3, dummies.get(4), 3));
-            edges.add(new Edge(dummies.get(0), dummies.get(1), 3));
-            edges.add(new Edge(dummies.get(0), dummies.get(2), 3));
-            edges.add(new Edge(dummies.get(1), dummies.get(2), 3));
-            edges.add(new Edge(dummies.get(2), dummies.get(3), 3));
-            edges.add(new Edge(dummies.get(3), dummies.get(4), 3));
-            edges.add(new Edge(dummies.get(3), dummies.get(5), 3));
-            edges.add(new Edge(dummies.get(4), dummies.get(5), 3));
-            edges.add(new Edge(dummies.get(5), bottomNode, 3));
+            edges.add(new Edge(l1, dummies[0], 3));
+            edges.add(new Edge(l2, dummies[1], 3));
+            edges.add(new Edge(l3, dummies[4], 3));
+            edges.add(new Edge(dummies[0], dummies[1], 3));
+            edges.add(new Edge(dummies[0], dummies[2], 3));
+            edges.add(new Edge(dummies[1], dummies[2], 3));
+            edges.add(new Edge(dummies[2], dummies[3], 3));
+            edges.add(new Edge(dummies[3], dummies[4], 3));
+            edges.add(new Edge(dummies[3], dummies[5], 3));
+            edges.add(new Edge(dummies[4], dummies[5], 3));
+            edges.add(new Edge(dummies[5], bottomNode, 3));
         }
 
         // generate the final graph and return

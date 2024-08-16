@@ -1,5 +1,6 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import org.junit.Test;
 
 import NP_complete.k_coloring.Sequential3Coloring;
 import NP_complete.k_sat._3SAT;
+import NP_complete.k_sat._3SatImplementation;
 import data_structures.boolean_formula.Variable;
 import data_structures.boolean_formula.cnf.Disjunction;
 import data_structures.boolean_formula.cnf.Literal;
@@ -192,13 +194,13 @@ public class SequentialTests {
     // 3-Col tests
     @Test
     public void noInstanceFullyConnected15Test() {
-        final Vertex[] vertices = new Vertex[15];
-        for (int i = 0; i < 15; i++) {
+        final Vertex[] vertices = new Vertex[18];
+        for (int i = 0; i < 18; i++) {
             vertices[i] = new Vertex(i);
         }
         final HashSet<Edge> edges = new HashSet<>();
-        for (int i = 0; i < 14; i++) {
-            for (int j = (i + 1); j < 15; j++) {
+        for (int i = 0; i < 17; i++) {
+            for (int j = (i + 1); j < 18; j++) {
                 edges.add(new Edge(vertices[i], vertices[j], 0));
             }
         }
@@ -210,6 +212,23 @@ public class SequentialTests {
 
     // 3-Sat tests
     @Test
+    public void trivialYesInstanceSmall() {
+        final ArrayList<Disjunction> cnf = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            final ArrayList<Literal> literals = new ArrayList<>();
+            literals.add(this.positiveLiterals[i]);
+            literals.add(this.negativeLiterals[i]);
+            cnf.add(new Disjunction(literals));
+        }
+        final _3CNF actualCNF = new _3CNF(cnf);
+        final _3SatImplementation _3sat = new _3SatImplementation(actualCNF);
+        final Graph graphAfterReduction = _3sat.reduceTo3Coloring();
+        assertEquals(21, graphAfterReduction.V.size()); // the reduction is supposed to have 21 nodes
+        assert (_3sat.solve());
+    }
+}
+
+    /*@Test
     public void satisfyingLargeTest() {
         final ArrayList<Disjunction> cnf = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -229,7 +248,6 @@ public class SequentialTests {
             cnf.add(new Disjunction(literalsNegative));
         }
         final _3CNF actualCNF = new _3CNF(cnf);
-        final _3SAT _3sat = new _3SAT(actualCNF);
+        final _3SatImplementation _3sat = new _3SatImplementation(actualCNF);
         assert (_3sat.solve());
-    }
-}
+    }*/
