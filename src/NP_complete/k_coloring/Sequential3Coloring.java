@@ -45,7 +45,8 @@ public class Sequential3Coloring {
         if (this.checkIfGraphIsNull()) {
             throw new RuntimeException("No Graph has been initialized!");
         }
-        this.solveActually(0);
+        this.colors[0] = 0;
+        this.solveActually(1);
         if (this.wasYesInstance == null) {
             this.wasYesInstance = false;
         }
